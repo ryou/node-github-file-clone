@@ -1,3 +1,4 @@
+import { GitHubEntryDao } from './dao/GitHubEntryDao';
 export declare abstract class Entry {
     readonly name: string;
     readonly currentDirectory: string;
@@ -18,3 +19,4 @@ export declare class PopEntry extends Entry {
     getEntryPath(): string;
 }
 export declare const generateEntry: (name: string, currentDirectory: string, type: string) => Entry;
+export declare const makeEntries: (path: string, dao: GitHubEntryDao) => Promise<Entry[]>;

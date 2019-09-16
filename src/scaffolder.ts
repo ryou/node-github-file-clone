@@ -3,24 +3,7 @@ import prompts from 'prompts'
 import { HttpClient } from './http/HttpClient'
 import { outputFileSync } from 'fs-extra'
 import { resolve } from 'path'
-import { Entry, FileEntry, generateEntry, PopEntry } from './Entry'
-
-const makeEntries = async (
-    path: string,
-    dao: GitHubEntryDao
-): Promise<Entry[]> => {
-    // TODO: ここもっとシンプルに書けるはず
-    let entries = (await dao.fetchEntries(path)).map(
-        (entry: any): Entry => {
-            return generateEntry(entry.name, path, entry.type)
-        }
-    )
-    if (path.length > 0) {
-        entries = [...[new PopEntry('..', path)], ...entries]
-    }
-
-    return entries
-}
+import { Entry, FileEntry, makeEntries } from './Entry'
 
 const selectEntry = async (
     path: string,

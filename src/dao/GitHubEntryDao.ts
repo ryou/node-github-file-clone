@@ -9,7 +9,7 @@ export class GitHubEntryDao {
         this._httpClient = httpClient
     }
 
-    async fetchEntries(directory: string) {
+    async fetchEntries(directory: string): Promise<any[]> {
         const url = `https://api.github.com/repos/${this._repository}/contents/${directory}`
         // TODO: headers省略できんか？
         const data = this._httpClient.get(url, {})

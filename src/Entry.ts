@@ -1,3 +1,5 @@
+import { GitHubEntryDao } from './dao/GitHubEntryDao'
+
 export abstract class Entry {
     readonly name: string
     readonly currentDirectory: string
@@ -38,7 +40,6 @@ export class PopEntry extends Entry {
 
     getEntryPath(): string {
         const pathArray = this.currentDirectory.split('/')
-        console.log(pathArray)
         pathArray.pop()
 
         return pathArray.join('/')
@@ -61,4 +62,25 @@ export const generateEntry = (
     }
 
     throw new Error(`unknown type ${type}.`)
+}
+
+export const makeEntries = async (
+    path: string,
+    dao: GitHubEntryDao
+): Promise<Entry[]> => {
+    const entryObjects = await dao.fetchEntries(path)
+
+    // 親の階層がある際には、親の階層へ行く選択肢を追加
+    if (path.includes('/')) {
+        entryObjects.unshift({
+            name: '..',
+            type: 'pop',
+        })
+    }
+
+    return entryObjects.map(
+        (entry: any): Entry => {
+            return generateEntry(entry.name, path, entry.type)
+        }
+    )
 }
