@@ -123,7 +123,7 @@ exports.makeEntries = function (path, dao) { return __awaiter(void 0, void 0, vo
             case 1:
                 entryObjects = _a.sent();
                 // 親の階層がある際には、親の階層へ行く選択肢を追加
-                if (path.includes('/')) {
+                if (path.length > 0) {
                     entryObjects.unshift({
                         name: '..',
                         type: 'pop',

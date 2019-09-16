@@ -71,7 +71,7 @@ export const makeEntries = async (
     const entryObjects = await dao.fetchEntries(path)
 
     // 親の階層がある際には、親の階層へ行く選択肢を追加
-    if (path.includes('/')) {
+    if (path.length > 0) {
         entryObjects.unshift({
             name: '..',
             type: 'pop',
