@@ -36,126 +36,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var prompts_1 = __importDefault(require("prompts"));
-var GitHubEntryDao_1 = require("./dao/GitHubEntryDao");
-var HttpClient_1 = require("./http/HttpClient");
-var fs_extra_1 = require("fs-extra");
 var commander_1 = require("commander");
-var path_1 = require("path");
+var scaffolder_1 = require("./scaffolder");
 require('dotenv').config();
-var selectEntry = function (path, dao) { return __awaiter(void 0, void 0, void 0, function () {
-    var choices, result;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                choices = [];
-                return [4 /*yield*/, dao.fetchEntries(path)];
-            case 1:
-                choices = (_a.sent()).map(function (entry) {
-                    return {
-                        title: entry.name + (entry.type === 'dir' ? '/' : ''),
-                        value: {
-                            path: entry.path,
-                            type: entry.type,
-                        },
-                    };
-                });
-                if (path.length > 0) {
-                    choices = __spreadArrays([
-                        {
-                            title: '..',
-                            value: {
-                                type: 'pop',
-                            },
-                        },
-                    ], choices);
-                }
-                return [4 /*yield*/, prompts_1.default({
-                        type: 'select',
-                        name: 'data',
-                        message: 'select file',
-                        choices: choices,
-                    })];
-            case 2:
-                result = _a.sent();
-                return [2 /*return*/, result.data];
-        }
-    });
-}); };
-var selectFile = function (baseDirectory, dao) { return __awaiter(void 0, void 0, void 0, function () {
-    var path, entry, pathArray;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                path = baseDirectory;
-                _a.label = 1;
-            case 1:
-                if (!true) return [3 /*break*/, 3];
-                return [4 /*yield*/, selectEntry(path, dao)];
-            case 2:
-                entry = _a.sent();
-                if (entry.type === 'dir') {
-                    path = entry.path;
-                }
-                else if (entry.type === 'file') {
-                    return [2 /*return*/, entry.path];
-                }
-                else if (entry.type === 'pop') {
-                    pathArray = path.split('/');
-                    pathArray.pop();
-                    path = pathArray.join('/');
-                }
-                else {
-                    throw new Error("unknow entry type " + entry.type);
-                }
-                return [3 /*break*/, 1];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
-var generateFileFromGitHub = function (outputFileName) { return __awaiter(void 0, void 0, void 0, function () {
-    var repositoryName, baseDir, httpClient, dao, filePath, fileContent;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                if (process.env.repository === undefined) {
-                    throw new Error('env variable repository is required');
-                }
-                if (process.env.baseDir === undefined) {
-                    throw new Error('env variable baseDir is required');
-                }
-                repositoryName = process.env.repository;
-                baseDir = process.env.baseDir;
-                httpClient = new HttpClient_1.HttpClient();
-                dao = new GitHubEntryDao_1.GitHubEntryDao(repositoryName, httpClient);
-                return [4 /*yield*/, selectFile(baseDir, dao)];
-            case 1:
-                filePath = _a.sent();
-                return [4 /*yield*/, dao.fetchFile(filePath)];
-            case 2:
-                fileContent = _a.sent();
-                fs_extra_1.outputFileSync(outputFileName, fileContent);
-                return [2 /*return*/];
-        }
-    });
-}); };
-var generateEnvFile = function (repositoryName, baseDir) {
-    var content = '';
-    content += "repository=" + repositoryName + "\n";
-    content += "baseDir=" + baseDir + "\n";
-    fs_extra_1.outputFileSync(path_1.resolve(__dirname, '../.env'), content);
-};
 var main = function () {
     var program = new commander_1.Command();
     program
@@ -167,7 +51,7 @@ var main = function () {
         var _b = _a.baseDir, baseDir = _b === void 0 ? '' : _b;
         return __awaiter(void 0, void 0, void 0, function () {
             return __generator(this, function (_c) {
-                generateEnvFile(repositoryName, baseDir);
+                scaffolder_1.generateEnvFile(repositoryName, baseDir);
                 return [2 /*return*/];
             });
         });
@@ -178,7 +62,7 @@ var main = function () {
         .action(function (outputFileName) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, generateFileFromGitHub(outputFileName)];
+                case 0: return [4 /*yield*/, scaffolder_1.generateFileFromGitHub(outputFileName)];
                 case 1:
                     _a.sent();
                     return [2 /*return*/];
