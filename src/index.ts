@@ -10,9 +10,9 @@ const main = () => {
         .command('init <repositoryName>')
         .description('set repository')
         // TODO: 説明書く
-        .option('-b, --baseDir <baseDir>', '')
-        .action(async (repositoryName, { baseDir = '' }) => {
-            generateEnvFile(repositoryName, baseDir)
+        .option('--initialDir <baseDir>', '')
+        .action(async (repositoryName, { initialDir = '' }) => {
+            generateEnvFile(repositoryName, initialDir)
         })
 
     program

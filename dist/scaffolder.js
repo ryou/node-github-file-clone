@@ -69,12 +69,12 @@ var selectEntry = function (path, dao) { return __awaiter(void 0, void 0, void 0
         }
     });
 }); };
-var selectFile = function (baseDirectory, dao) { return __awaiter(void 0, void 0, void 0, function () {
+var selectFile = function (initialDir, dao) { return __awaiter(void 0, void 0, void 0, function () {
     var path, entry, entryPath;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                path = baseDirectory;
+                path = initialDir;
                 _a.label = 1;
             case 1:
                 if (!true) return [3 /*break*/, 3];
@@ -92,21 +92,21 @@ var selectFile = function (baseDirectory, dao) { return __awaiter(void 0, void 0
     });
 }); };
 exports.generateFileFromGitHub = function (outputFileName) { return __awaiter(void 0, void 0, void 0, function () {
-    var repositoryName, baseDir, httpClient, dao, filePath, fileContent;
+    var repositoryName, initialDir, httpClient, dao, filePath, fileContent;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 if (process.env.repository === undefined) {
                     throw new Error('env variable repository is required');
                 }
-                if (process.env.baseDir === undefined) {
-                    throw new Error('env variable baseDir is required');
+                if (process.env.initialDir === undefined) {
+                    throw new Error('env variable initialDir is required');
                 }
                 repositoryName = process.env.repository;
-                baseDir = process.env.baseDir;
+                initialDir = process.env.initialDir;
                 httpClient = new HttpClient_1.HttpClient();
                 dao = new GitHubEntryDao_1.GitHubEntryDao(repositoryName, httpClient);
-                return [4 /*yield*/, selectFile(baseDir, dao)];
+                return [4 /*yield*/, selectFile(initialDir, dao)];
             case 1:
                 filePath = _a.sent();
                 return [4 /*yield*/, dao.fetchFile(filePath)];
@@ -117,9 +117,9 @@ exports.generateFileFromGitHub = function (outputFileName) { return __awaiter(vo
         }
     });
 }); };
-exports.generateEnvFile = function (repositoryName, baseDir) {
+exports.generateEnvFile = function (repositoryName, initialDir) {
     var content = '';
     content += "repository=" + repositoryName + "\n";
-    content += "baseDir=" + baseDir + "\n";
+    content += "initialDir=" + initialDir + "\n";
     fs_extra_1.outputFileSync(path_1.resolve(__dirname, '../.env'), content);
 };

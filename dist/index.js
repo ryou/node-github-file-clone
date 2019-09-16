@@ -46,12 +46,12 @@ var main = function () {
         .command('init <repositoryName>')
         .description('set repository')
         // TODO: 説明書く
-        .option('-b, --baseDir <baseDir>', '')
+        .option('--initialDir <baseDir>', '')
         .action(function (repositoryName, _a) {
-        var _b = _a.baseDir, baseDir = _b === void 0 ? '' : _b;
+        var _b = _a.initialDir, initialDir = _b === void 0 ? '' : _b;
         return __awaiter(void 0, void 0, void 0, function () {
             return __generator(this, function (_c) {
-                scaffolder_1.generateEnvFile(repositoryName, baseDir);
+                scaffolder_1.generateEnvFile(repositoryName, initialDir);
                 return [2 /*return*/];
             });
         });

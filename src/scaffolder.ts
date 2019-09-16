@@ -25,8 +25,8 @@ const selectEntry = async (
     return entries[result.index]
 }
 
-const selectFile = async (baseDirectory: string, dao: GitHubEntryDao) => {
-    let path = baseDirectory
+const selectFile = async (initialDir: string, dao: GitHubEntryDao) => {
+    let path = initialDir
     while (true) {
         const entry = await selectEntry(path, dao)
 
@@ -43,21 +43,21 @@ export const generateFileFromGitHub = async (outputFileName: string) => {
     if (process.env.repository === undefined) {
         throw new Error('env variable repository is required')
     }
-    if (process.env.baseDir === undefined) {
-        throw new Error('env variable baseDir is required')
+    if (process.env.initialDir === undefined) {
+        throw new Error('env variable initialDir is required')
     }
     const repositoryName = process.env.repository
-    const baseDir = process.env.baseDir
+    const initialDir = process.env.initialDir
     const httpClient = new HttpClient()
     const dao = new GitHubEntryDao(repositoryName, httpClient)
-    const filePath = await selectFile(baseDir, dao)
+    const filePath = await selectFile(initialDir, dao)
     const fileContent = await dao.fetchFile(filePath)
     outputFileSync(outputFileName, fileContent)
 }
 
-export const generateEnvFile = (repositoryName: string, baseDir: string) => {
+export const generateEnvFile = (repositoryName: string, initialDir: string) => {
     let content = ''
     content += `repository=${repositoryName}\n`
-    content += `baseDir=${baseDir}\n`
+    content += `initialDir=${initialDir}\n`
     outputFileSync(resolve(__dirname, '../.env'), content)
 }
