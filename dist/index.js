@@ -60,9 +60,19 @@ var main = function () {
         .command('generate <ouputFileName>')
         .description('copy file from github')
         .action(function (outputFileName) { return __awaiter(void 0, void 0, void 0, function () {
+        var repository, initialDir;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, scaffolder_1.generateFileFromGitHub(outputFileName)];
+                case 0:
+                    if (process.env.repository === undefined) {
+                        throw new Error('env variable repository is required');
+                    }
+                    if (process.env.initialDir === undefined) {
+                        throw new Error('env variable initialDir is required');
+                    }
+                    repository = process.env.repository;
+                    initialDir = process.env.initialDir;
+                    return [4 /*yield*/, scaffolder_1.generateFileFromGitHub(repository, initialDir, outputFileName)];
                 case 1:
                     _a.sent();
                     return [2 /*return*/];

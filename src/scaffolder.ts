@@ -39,15 +39,11 @@ const selectFile = async (initialDir: string, dao: GitHubEntryDao) => {
     }
 }
 
-export const generateFileFromGitHub = async (outputFileName: string) => {
-    if (process.env.repository === undefined) {
-        throw new Error('env variable repository is required')
-    }
-    if (process.env.initialDir === undefined) {
-        throw new Error('env variable initialDir is required')
-    }
-    const repositoryName = process.env.repository
-    const initialDir = process.env.initialDir
+export const generateFileFromGitHub = async (
+    repositoryName: string,
+    initialDir: string,
+    outputFileName: string
+) => {
     const httpClient = new HttpClient()
     const dao = new GitHubEntryDao(repositoryName, httpClient)
     const filePath = await selectFile(initialDir, dao)
