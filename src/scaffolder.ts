@@ -2,8 +2,8 @@ import { GitHubEntryDao } from './dao/GitHubEntryDao'
 import prompts from 'prompts'
 import { HttpClient } from './http/HttpClient'
 import { outputFileSync } from 'fs-extra'
-import { resolve } from 'path'
 import { Entry, FileEntry, makeEntries } from './Entry'
+import { ENV_PATH } from './projectInfo'
 
 const selectEntry = async (
     path: string,
@@ -55,5 +55,5 @@ export const generateEnvFile = (repositoryName: string, initialDir: string) => {
     let content = ''
     content += `repository=${repositoryName}\n`
     content += `initialDir=${initialDir}\n`
-    outputFileSync(resolve(__dirname, '../.env'), content)
+    outputFileSync(ENV_PATH, content)
 }

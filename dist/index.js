@@ -39,7 +39,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var commander_1 = require("commander");
 var scaffolder_1 = require("./scaffolder");
-require('dotenv').config();
+var projectInfo_1 = require("./projectInfo");
+require('dotenv').config({ path: projectInfo_1.ENV_PATH });
 var main = function () {
     var program = new commander_1.Command();
     program

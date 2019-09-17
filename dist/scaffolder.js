@@ -43,8 +43,8 @@ var GitHubEntryDao_1 = require("./dao/GitHubEntryDao");
 var prompts_1 = __importDefault(require("prompts"));
 var HttpClient_1 = require("./http/HttpClient");
 var fs_extra_1 = require("fs-extra");
-var path_1 = require("path");
 var Entry_1 = require("./Entry");
+var projectInfo_1 = require("./projectInfo");
 var selectEntry = function (path, dao) { return __awaiter(void 0, void 0, void 0, function () {
     var entries, result;
     return __generator(this, function (_a) {
@@ -113,5 +113,5 @@ exports.generateEnvFile = function (repositoryName, initialDir) {
     var content = '';
     content += "repository=" + repositoryName + "\n";
     content += "initialDir=" + initialDir + "\n";
-    fs_extra_1.outputFileSync(path_1.resolve(__dirname, '../.env'), content);
+    fs_extra_1.outputFileSync(projectInfo_1.ENV_PATH, content);
 };

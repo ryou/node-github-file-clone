@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import { Command } from 'commander'
 import { generateEnvFile, generateFileFromGitHub } from './scaffolder'
-require('dotenv').config()
+import { ENV_PATH } from './projectInfo'
+require('dotenv').config({ path: ENV_PATH })
 
 const main = () => {
     const program = new Command()
