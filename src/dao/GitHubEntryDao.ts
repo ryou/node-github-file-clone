@@ -1,10 +1,10 @@
-import { AbstractHttpClient } from '../http/AbstractHttpClient'
+import { IHttpClient } from '../http/IHttpClient'
 
 export class GitHubEntryDao {
     protected _repository: string
-    protected _httpClient: AbstractHttpClient
+    protected _httpClient: IHttpClient
 
-    constructor(repository: string, httpClient: AbstractHttpClient) {
+    constructor(repository: string, httpClient: IHttpClient) {
         this._repository = repository
         this._httpClient = httpClient
     }
