@@ -44,22 +44,8 @@ require('dotenv').config({ path: projectInfo_1.ENV_PATH });
 var main = function () {
     var program = new commander_1.Command();
     program
-        .command('init <repositoryName>')
-        .description('set repository')
-        // TODO: 説明書く
-        .option('--initialDir <baseDir>', '')
-        .action(function (repositoryName, _a) {
-        var _b = _a.initialDir, initialDir = _b === void 0 ? '' : _b;
-        return __awaiter(void 0, void 0, void 0, function () {
-            return __generator(this, function (_c) {
-                githubFileClone_1.generateEnvFile(repositoryName, initialDir);
-                return [2 /*return*/];
-            });
-        });
-    });
-    program
-        .command('generate <ouputFileName>')
-        .description('copy file from github')
+        .arguments('<ouputFileName>')
+        .description('clone file from github')
         .action(function (outputFileName) { return __awaiter(void 0, void 0, void 0, function () {
         var repository, initialDir;
         return __generator(this, function (_a) {
