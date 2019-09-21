@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var commander_1 = require("commander");
-var scaffolder_1 = require("./scaffolder");
+var githubFileClone_1 = require("./githubFileClone");
 var projectInfo_1 = require("./projectInfo");
 require('dotenv').config({ path: projectInfo_1.ENV_PATH });
 var main = function () {
@@ -52,7 +52,7 @@ var main = function () {
         var _b = _a.initialDir, initialDir = _b === void 0 ? '' : _b;
         return __awaiter(void 0, void 0, void 0, function () {
             return __generator(this, function (_c) {
-                scaffolder_1.generateEnvFile(repositoryName, initialDir);
+                githubFileClone_1.generateEnvFile(repositoryName, initialDir);
                 return [2 /*return*/];
             });
         });
@@ -73,7 +73,7 @@ var main = function () {
                     }
                     repository = process.env.repository;
                     initialDir = process.env.initialDir;
-                    return [4 /*yield*/, scaffolder_1.generateFileFromGitHub(repository, initialDir, outputFileName)];
+                    return [4 /*yield*/, githubFileClone_1.cloneFileFromGitHub(repository, initialDir, outputFileName)];
                 case 1:
                     _a.sent();
                     return [2 /*return*/];

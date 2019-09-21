@@ -39,7 +39,7 @@ const selectFile = async (initialDir: string, dao: GitHubEntryDao) => {
     }
 }
 
-export const generateFileFromGitHub = async (
+export const cloneFileFromGitHub = async (
     repositoryName: string,
     initialDir: string,
     outputFileName: string

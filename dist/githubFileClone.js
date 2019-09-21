@@ -91,7 +91,7 @@ var selectFile = function (initialDir, dao) { return __awaiter(void 0, void 0, v
         }
     });
 }); };
-exports.generateFileFromGitHub = function (repositoryName, initialDir, outputFileName) { return __awaiter(void 0, void 0, void 0, function () {
+exports.cloneFileFromGitHub = function (repositoryName, initialDir, outputFileName) { return __awaiter(void 0, void 0, void 0, function () {
     var httpClient, dao, filePath, fileContent;
     return __generator(this, function (_a) {
         switch (_a.label) {

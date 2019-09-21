@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { Command } from 'commander'
-import { generateEnvFile, generateFileFromGitHub } from './scaffolder'
+import { generateEnvFile, cloneFileFromGitHub } from './githubFileClone'
 import { ENV_PATH } from './projectInfo'
 require('dotenv').config({ path: ENV_PATH })
 
@@ -29,7 +29,7 @@ const main = () => {
             const repository = process.env.repository
             const initialDir = process.env.initialDir
 
-            await generateFileFromGitHub(repository, initialDir, outputFileName)
+            await cloneFileFromGitHub(repository, initialDir, outputFileName)
         })
 
     program.parse(process.argv)
