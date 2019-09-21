@@ -13,6 +13,9 @@ export abstract class Entry {
     abstract getEntryPath(): string
 }
 
+/**
+ * ファイル
+ */
 export class FileEntry extends Entry {
     getDisplayName(): string {
         return this.name
@@ -23,6 +26,9 @@ export class FileEntry extends Entry {
     }
 }
 
+/**
+ * ディレクトリ
+ */
 export class DirectoryEntry extends Entry {
     getDisplayName(): string {
         return `${this.name}/`
@@ -33,6 +39,10 @@ export class DirectoryEntry extends Entry {
     }
 }
 
+/**
+ * １階層上に上がるエントリ
+ * （エントリかは微妙だが、ファイル、ディレクトリと並列に扱いたかったのでエントリに含めた）
+ */
 export class PopEntry extends Entry {
     getDisplayName(): string {
         return this.name
@@ -46,7 +56,14 @@ export class PopEntry extends Entry {
     }
 }
 
-export const generateEntry = (
+/**
+ * typeに応じたEntryを生成し返却
+ *
+ * @param name
+ * @param currentDirectory
+ * @param type
+ */
+export const makeEntry = (
     name: string,
     currentDirectory: string,
     type: string
@@ -64,6 +81,12 @@ export const generateEntry = (
     throw new Error(`unknown type ${type}.`)
 }
 
+/**
+ * リポジトリのpathのエントリ一覧からEntry配列を生成し返却する
+ *
+ * @param path
+ * @param dao
+ */
 export const makeEntries = async (
     path: string,
     dao: GitHubEntryDao
@@ -80,7 +103,7 @@ export const makeEntries = async (
 
     return entryObjects.map(
         (entry: any): Entry => {
-            return generateEntry(entry.name, path, entry.type)
+            return makeEntry(entry.name, path, entry.type)
         }
     )
 }
