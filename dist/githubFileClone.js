@@ -91,8 +91,23 @@ var selectFile = function (initialDir, dao) { return __awaiter(void 0, void 0, v
         }
     });
 }); };
-exports.cloneFileFromGitHub = function (repositoryName, initialDir, outputFileName) { return __awaiter(void 0, void 0, void 0, function () {
-    var httpClient, dao, filePath, fileContent;
+var askOutputFileName = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, prompts_1.default({
+                    type: 'text',
+                    name: 'outputFileName',
+                    message: 'output file name',
+                })];
+            case 1:
+                result = _a.sent();
+                return [2 /*return*/, result.outputFileName];
+        }
+    });
+}); };
+exports.cloneFileFromGitHub = function (repositoryName, initialDir) { return __awaiter(void 0, void 0, void 0, function () {
+    var httpClient, dao, filePath, outputFileName, fileContent;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -101,8 +116,11 @@ exports.cloneFileFromGitHub = function (repositoryName, initialDir, outputFileNa
                 return [4 /*yield*/, selectFile(initialDir, dao)];
             case 1:
                 filePath = _a.sent();
-                return [4 /*yield*/, dao.fetchFile(filePath)];
+                return [4 /*yield*/, askOutputFileName()];
             case 2:
+                outputFileName = _a.sent();
+                return [4 /*yield*/, dao.fetchFile(filePath)];
+            case 3:
                 fileContent = _a.sent();
                 fs_extra_1.outputFileSync(outputFileName, fileContent);
                 return [2 /*return*/];

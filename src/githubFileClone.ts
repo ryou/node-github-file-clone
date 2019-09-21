@@ -39,14 +39,24 @@ const selectFile = async (initialDir: string, dao: GitHubEntryDao) => {
     }
 }
 
+const askOutputFileName = async (): Promise<string> => {
+    const result = await prompts({
+        type: 'text',
+        name: 'outputFileName',
+        message: 'output file name',
+    })
+
+    return result.outputFileName
+}
+
 export const cloneFileFromGitHub = async (
     repositoryName: string,
-    initialDir: string,
-    outputFileName: string
+    initialDir: string
 ) => {
     const httpClient = new HttpClient()
     const dao = new GitHubEntryDao(repositoryName, httpClient)
     const filePath = await selectFile(initialDir, dao)
+    const outputFileName = await askOutputFileName()
     const fileContent = await dao.fetchFile(filePath)
     outputFileSync(outputFileName, fileContent)
 }

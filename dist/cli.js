@@ -43,10 +43,7 @@ var projectInfo_1 = require("./projectInfo");
 require('dotenv').config({ path: projectInfo_1.ENV_PATH });
 var main = function () {
     var program = new commander_1.Command();
-    program
-        .arguments('<ouputFileName>')
-        .description('clone file from github')
-        .action(function (outputFileName) { return __awaiter(void 0, void 0, void 0, function () {
+    program.description('clone file from github').action(function () { return __awaiter(void 0, void 0, void 0, function () {
         var repository, initialDir;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -59,7 +56,7 @@ var main = function () {
                     }
                     repository = process.env.repository;
                     initialDir = process.env.initialDir;
-                    return [4 /*yield*/, githubFileClone_1.cloneFileFromGitHub(repository, initialDir, outputFileName)];
+                    return [4 /*yield*/, githubFileClone_1.cloneFileFromGitHub(repository, initialDir)];
                 case 1:
                     _a.sent();
                     return [2 /*return*/];
