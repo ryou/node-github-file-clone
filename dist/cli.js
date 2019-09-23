@@ -36,11 +36,122 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var commander_1 = require("commander");
-var githubFileClone_1 = require("./githubFileClone");
 var projectInfo_1 = require("./projectInfo");
+var GitHubEntryDao_1 = require("./dao/GitHubEntryDao");
+var Entry_1 = require("./Entry");
+var prompts_1 = __importDefault(require("prompts"));
+var HttpClient_1 = require("./http/HttpClient");
+var fs_extra_1 = require("fs-extra");
 require('dotenv').config({ path: projectInfo_1.ENV_PATH });
+/**
+ * ユーザーにリポジトリのpathのエントリ一覧から一つエントリを選択させる
+ *
+ * @param path
+ * @param dao
+ */
+var selectEntry = function (path, dao) { return __awaiter(void 0, void 0, void 0, function () {
+    var entries, result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, Entry_1.makeEntries(path, dao)];
+            case 1:
+                entries = _a.sent();
+                return [4 /*yield*/, prompts_1.default({
+                        type: 'select',
+                        name: 'index',
+                        message: 'select file',
+                        choices: entries.map(function (entry, index) {
+                            return {
+                                title: entry.getDisplayName(),
+                                value: String(index),
+                            };
+                        }),
+                    })];
+            case 2:
+                result = _a.sent();
+                return [2 /*return*/, entries[result.index]];
+        }
+    });
+}); };
+/**
+ * ユーザーにGitHubのリポジトリから生成するファイルを一つ選択させる
+ *
+ * @param initialDir
+ * @param dao
+ */
+var selectFile = function (initialDir, dao) { return __awaiter(void 0, void 0, void 0, function () {
+    var path, entry, entryPath;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                path = initialDir;
+                _a.label = 1;
+            case 1:
+                if (!true) return [3 /*break*/, 3];
+                return [4 /*yield*/, selectEntry(path, dao)];
+            case 2:
+                entry = _a.sent();
+                entryPath = entry.getEntryPath();
+                if (entry instanceof Entry_1.FileEntry) {
+                    return [2 /*return*/, entryPath];
+                }
+                path = entryPath;
+                return [3 /*break*/, 1];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+/**
+ * ユーザーに出力するファイル名を尋ねる
+ */
+var askOutputFileName = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, prompts_1.default({
+                    type: 'text',
+                    name: 'outputFileName',
+                    message: 'output file name',
+                })];
+            case 1:
+                result = _a.sent();
+                return [2 /*return*/, result.outputFileName];
+        }
+    });
+}); };
+/**
+ * リポジトリ（repositoryName）からユーザーにファイルを選択させ、そのファイルを
+ * ローカル端末の任意の場所に生成する
+ *
+ * @param repositoryName
+ * @param initialDir
+ */
+exports.cloneFileFromGitHub = function (repositoryName, initialDir) { return __awaiter(void 0, void 0, void 0, function () {
+    var httpClient, dao, filePath, outputFileName, fileContent;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                httpClient = new HttpClient_1.HttpClient();
+                dao = new GitHubEntryDao_1.GitHubEntryDao(repositoryName, httpClient);
+                return [4 /*yield*/, selectFile(initialDir, dao)];
+            case 1:
+                filePath = _a.sent();
+                return [4 /*yield*/, askOutputFileName()];
+            case 2:
+                outputFileName = _a.sent();
+                return [4 /*yield*/, dao.fetchFile(filePath)];
+            case 3:
+                fileContent = _a.sent();
+                fs_extra_1.outputFileSync(outputFileName, fileContent);
+                return [2 /*return*/];
+        }
+    });
+}); };
 var main = function () {
     var program = new commander_1.Command();
     program.description('clone file from github').action(function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -56,7 +167,7 @@ var main = function () {
                     }
                     repository = process.env.repository;
                     initialDir = process.env.initialDir;
-                    return [4 /*yield*/, githubFileClone_1.cloneFileFromGitHub(repository, initialDir)];
+                    return [4 /*yield*/, exports.cloneFileFromGitHub(repository, initialDir)];
                 case 1:
                     _a.sent();
                     return [2 /*return*/];

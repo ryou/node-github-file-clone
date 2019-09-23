@@ -36,26 +36,37 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var baseUrl = 'https://api.github.com/repos';
 var GitHubEntryDao = /** @class */ (function () {
     function GitHubEntryDao(repository, httpClient) {
         this._repository = repository;
         this._httpClient = httpClient;
     }
+    /**
+     * リポジトリの引数に渡されたディレクトリ内のエントリ一覧を返却する
+     *
+     * @param directory
+     */
     GitHubEntryDao.prototype.fetchEntries = function (directory) {
         return __awaiter(this, void 0, void 0, function () {
             var url, data;
             return __generator(this, function (_a) {
-                url = "https://api.github.com/repos/" + this._repository + "/contents/" + directory;
+                url = baseUrl + "/" + this._repository + "/contents/" + directory;
                 data = this._httpClient.get(url, {});
                 return [2 /*return*/, data];
             });
         });
     };
+    /**
+     * リポジトリのfilePathのファイルの内容を返却する
+     *
+     * @param filePath
+     */
     GitHubEntryDao.prototype.fetchFile = function (filePath) {
         return __awaiter(this, void 0, void 0, function () {
             var url, data;
             return __generator(this, function (_a) {
-                url = "https://api.github.com/repos/" + this._repository + "/contents/" + filePath + "?ref=master";
+                url = baseUrl + "/" + this._repository + "/contents/" + filePath + "?ref=master";
                 data = this._httpClient.get(url, {
                     Accept: 'application/vnd.github.v3.raw+json',
                 });

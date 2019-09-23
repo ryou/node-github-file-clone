@@ -7,7 +7,11 @@
     "clean": "rimraf dist",
     "build": "tsc",
     "dev": "tsc -w",
-    "release": "npm-run-all -s clean build"
+    "release": "npm-run-all -s clean build",
+    "pre-commit:lint": "lint-staged",
+    "pre-commit:add": "git add dist",
+    "pre-commit:release": "npm-run-all -s release pre-commit:add",
+    "pre-commit": "npm-run-all -s pre-commit:lint pre-commit:release"
   },
   "author": "ryou",
   "license": "ISC",
@@ -50,7 +54,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "npm run pre-commit"
     }
   },
   "lint-staged": {

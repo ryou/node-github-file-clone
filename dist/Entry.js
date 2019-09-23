@@ -57,6 +57,9 @@ var Entry = /** @class */ (function () {
     return Entry;
 }());
 exports.Entry = Entry;
+/**
+ * ファイル
+ */
 var FileEntry = /** @class */ (function (_super) {
     __extends(FileEntry, _super);
     function FileEntry() {
@@ -71,6 +74,9 @@ var FileEntry = /** @class */ (function (_super) {
     return FileEntry;
 }(Entry));
 exports.FileEntry = FileEntry;
+/**
+ * ディレクトリ
+ */
 var DirectoryEntry = /** @class */ (function (_super) {
     __extends(DirectoryEntry, _super);
     function DirectoryEntry() {
@@ -85,6 +91,10 @@ var DirectoryEntry = /** @class */ (function (_super) {
     return DirectoryEntry;
 }(Entry));
 exports.DirectoryEntry = DirectoryEntry;
+/**
+ * １階層上に上がるエントリ
+ * （エントリかは微妙だが、ファイル、ディレクトリと並列に扱いたかったのでエントリに含めた）
+ */
 var PopEntry = /** @class */ (function (_super) {
     __extends(PopEntry, _super);
     function PopEntry() {
@@ -101,7 +111,14 @@ var PopEntry = /** @class */ (function (_super) {
     return PopEntry;
 }(Entry));
 exports.PopEntry = PopEntry;
-exports.generateEntry = function (name, currentDirectory, type) {
+/**
+ * typeに応じたEntryを生成し返却
+ *
+ * @param name
+ * @param currentDirectory
+ * @param type
+ */
+exports.makeEntry = function (name, currentDirectory, type) {
     if (type === 'file') {
         return new FileEntry(name, currentDirectory);
     }
@@ -113,6 +130,12 @@ exports.generateEntry = function (name, currentDirectory, type) {
     }
     throw new Error("unknown type " + type + ".");
 };
+/**
+ * リポジトリのpathのエントリ一覧からEntry配列を生成し返却する
+ *
+ * @param path
+ * @param dao
+ */
 exports.makeEntries = function (path, dao) { return __awaiter(void 0, void 0, void 0, function () {
     var entryObjects;
     return __generator(this, function (_a) {
@@ -130,7 +153,7 @@ exports.makeEntries = function (path, dao) { return __awaiter(void 0, void 0, vo
                     });
                 }
                 return [2 /*return*/, entryObjects.map(function (entry) {
-                        return exports.generateEntry(entry.name, path, entry.type);
+                        return exports.makeEntry(entry.name, path, entry.type);
                     })];
         }
     });
